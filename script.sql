@@ -2,7 +2,7 @@
 -- 1. CREACIÓN DE LA BASE DE DATOS
 -- ==============================================================================
 -- NOTA: Ejecuta esta instrucción y luego conéctate a la base de datos 'viveros' 
--- antes de ejecutar el resto del script (en psql usa: \c viveros).
+-- antes de ejecutar el resto del script.
 -- CREATE DATABASE viveros;
 -- \c viveros
 
