@@ -202,7 +202,7 @@ BEFORE INSERT OR UPDATE ON empleado_zona
 FOR EACH ROW EXECUTE FUNCTION comprobar_destino_empleado_zona();
 
 -- ==============================================================================
--- 2. INSERCIÓN DE DATOS (Mínimo 5 filas por tabla)
+-- 3. INSERCIÓN DE DATOS (Mínimo 5 filas por tabla)
 -- ==============================================================================
 
 INSERT INTO vivero VALUES
@@ -308,7 +308,7 @@ INSERT INTO pedido VALUES
 (1006, 'CLI005', 'DNI005', DATE '2026-09-01', 150.00);
 
 -- =========================
--- 3. CONSULTAS DE COMPROBACIÓN
+-- 4. CONSULTAS DE COMPROBACIÓN
 -- =========================
 
 -- Comprobar que todas las tablas tienen al menos cinco filas.
@@ -340,7 +340,7 @@ GROUP BY cp.dni_cliente, date_trunc('month', p.fecha)
 ORDER BY cp.dni_cliente, mes;
 
 -- =========================
--- 4 EJEMPLOS DE DELETE
+-- 5. EJEMPLOS DE DELETE
 -- Se ejecutan dentro de una transacción y se deshacen con ROLLBACK,
 -- para que los datos de prueba sigan intactos.
 -- =========================
