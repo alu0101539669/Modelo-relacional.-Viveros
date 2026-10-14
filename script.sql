@@ -351,12 +351,12 @@ BEGIN;
 DELETE FROM stock_zona
 WHERE id_vivero = 1 AND id_zona = 1 AND id_producto = 2;
 
--- 2 Intentar borrar un cliente que tiene pedidos.
+-- 2 Intentar borrar un cliente que tiene pedidos (comentado para una ejecucion mas limpia).
 -- La operación debe fallar por la restricción RESTRICT de pedidos,
 -- en el caso de que borraramos por un casual los pedidos relacionados con este,
 -- al eliminar cliente eliminaria su entrada en cliente_plus tambien.
-DELETE FROM cliente
-WHERE dni_cliente = 'CLI002';
+--DELETE FROM cliente
+--WHERE dni_cliente = 'CLI002';
 
 -- 3. Borrar una zona: CASCADE elimina su stock y sus registros de productividad.
 DELETE FROM zona WHERE id_vivero = 1 AND id_zona = 2;
