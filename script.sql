@@ -202,7 +202,7 @@ BEFORE INSERT OR UPDATE ON empleado_zona
 FOR EACH ROW EXECUTE FUNCTION comprobar_destino_empleado_zona();
 
 -- ==============================================================================
--- 3. INSERCIÓN DE DATOS (Mínimo 5 filas por tabla)
+-- 2. INSERCIÓN DE DATOS (Mínimo 5 filas por tabla)
 -- ==============================================================================
 
 INSERT INTO vivero VALUES
@@ -308,7 +308,7 @@ INSERT INTO pedido VALUES
 (1006, 'CLI005', 'DNI005', DATE '2026-09-01', 150.00);
 
 -- =========================
--- 4 CONSULTAS DE COMPROBACIÓN
+-- 3. CONSULTAS DE COMPROBACIÓN
 -- =========================
 
 -- Comprobar que todas las tablas tienen al menos cinco filas.
@@ -328,8 +328,7 @@ UNION ALL SELECT 'pedido', count(*) FROM pedido
 ORDER BY tabla;
 
 -- Ejemplo de atributo calculado mediante consulta: volumen de compras mensual
--- de clientes Plus. No se almacena porque el enunciado no define fórmula
--- de bonificación ni exige guardar un total derivado.
+-- de clientes Plus.
 SELECT cp.dni_cliente,
        date_trunc('month', p.fecha)::date AS mes,
        COALESCE(SUM(p.importe), 0)::NUMERIC(12,2) AS volumen_compras
@@ -341,7 +340,7 @@ GROUP BY cp.dni_cliente, date_trunc('month', p.fecha)
 ORDER BY cp.dni_cliente, mes;
 
 -- =========================
--- 5 EJEMPLOS REPRESENTATIVOS DE DELETE
+-- 4 EJEMPLOS DE DELETE
 -- Se ejecutan dentro de una transacción y se deshacen con ROLLBACK,
 -- para que los datos de prueba sigan intactos.
 -- =========================
@@ -352,22 +351,14 @@ BEGIN;
 DELETE FROM stock_zona
 WHERE id_vivero = 1 AND id_zona = 1 AND id_producto = 2;
 
--- 2. Borrar un cliente Plus: ON DELETE CASCADE elimina su fila de CLIENTE_PLUS
--- al borrar el cliente base. En este ejemplo no se borra el cliente porque
--- tiene pedidos y la FK de PEDIDO aplica RESTRICT.
--- Eliminar primero su pedido permite después eliminar cliente y cliente_plus.
-DELETE FROM pedido WHERE id_pedido = 1002;
-DELETE FROM cliente WHERE dni_cliente = 'CLI002';
+-- 2 Intentar borrar un cliente que tiene pedidos.
+-- La operación debe fallar por la restricción RESTRICT de pedidos,
+-- en el caso de que borraramos por un casual los pedidos relacionados con este,
+-- al eliminar cliente eliminaria su entrada en cliente_plus tambien.
+DELETE FROM cliente
+WHERE dni_cliente = 'CLI002';
 
 -- 3. Borrar una zona: CASCADE elimina su stock y sus registros de productividad.
--- RESTRICT en relaciones de empleado impide borrarla si sigue referenciada
--- por empleado_zona; se elimina antes la asignación de trabajo correspondiente.
-DELETE FROM empleado_zona
-WHERE dni_empleado = 'DNI002' AND id_vivero = 1 AND id_zona = 2;
-DELETE FROM registro_productividad
-WHERE id_vivero = 1 AND id_zona = 2;
-DELETE FROM stock_zona
-WHERE id_vivero = 1 AND id_zona = 2;
 DELETE FROM zona WHERE id_vivero = 1 AND id_zona = 2;
 
 ROLLBACK;
